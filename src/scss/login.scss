@@ -1,0 +1,151 @@
+@import "util/fonts";
+@import "util/color.scss";
+
+.login-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    width: 100%;
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    
+        border: 1px solid lightgray;
+        border-radius: 3px;
+    
+        width: 25%;
+        min-width: 15em;
+        max-width: 25em;
+        
+        margin-top: 7em;
+        padding: 1.5em;
+
+        -webkit-box-shadow: 4px 4px 10px -3px rgba(0,0,0,0.84); 
+        box-shadow: 4px 4px 10px -3px rgba(0,0,0,0.84);
+
+        .title {
+            margin: 5px;
+            text-align: center;
+            font-size: 1.4em;
+            @include set-font($roboto);
+        }
+
+        .description {
+            margin: 5px;
+            text-align: center;
+            font-size: 1.2em;
+            @include set-font($roboto, 100);
+        }
+    
+        .formgroup {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+
+            margin: 0;
+            padding: 0;
+
+            form {
+                margin-top: 5px;
+                display: flex;
+                flex-direction: column;
+                justify-items: center;
+                place-items: center;
+                width: 100%;;
+
+                input:not([type='checkbox']) {
+                    width: 94%;
+                    margin-bottom: 5px;
+                    border: 1px solid gray;
+                    border-radius: 3px;
+                    padding: 13px;
+                }
+    
+                ::placeholder {
+                    @include set-font($montserrat);
+                    color: gray;
+                }
+
+                .policies {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-start;
+                    margin-left: 0;
+                    margin-right: auto;
+
+                    margin-bottom: 5px;
+
+                    input {
+                        width: initial;
+                    }
+
+                    p {
+                        margin: 0;
+                        font-size: 1em;
+                        @include set-font($roboto, 100);
+
+                        a {
+                            text-decoration: none;
+                            color: $analogues;
+                        }
+                    }
+                }
+            }
+    
+            .link-and-submit {
+                margin: 0;
+                padding: 0;
+
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+
+                a {
+                    text-decoration: none;
+
+                    p {
+                        border-bottom: 1px solid white;
+                        @include set-font($montserrat);
+                        color: $analogues;
+                        margin: 2px;
+                    }
+
+                    p:after {
+                        display: block;
+                        content: '';
+                        transition: transform 250ms ease-in-out;
+                        transform: scaleX(0);  
+                        border-bottom: 1px solid $analogues;
+                    }
+
+                    p:hover:after {
+                        transform: scaleX(1); 
+                    }
+                }
+
+                button {
+                    background-color: $primary;
+                    border: 1px solid $primary;
+                    border-radius: 2px;
+                    color: white;
+                    font-size: 0.9em;
+
+                    @include set-font($montserrat);
+
+                    padding: 5px 13px 5px 13px;
+                }
+
+                button:hover {
+                    cursor: pointer;
+
+                    transition: all 250ms ease-in-out;
+                    background-color: darken($primary, 15%);
+                }
+            }
+        }
+    }
+}

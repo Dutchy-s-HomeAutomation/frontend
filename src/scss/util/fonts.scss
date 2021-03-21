@@ -1,0 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Roboto:wght@100;300;400&display=swap');
+
+$roboto: 'Roboto', sans-serif;
+$montserrat: 'Montserrat', sans-serif;
+
+@mixin set-font($family, $weight: 300) {
+    font-family: $family;
+    font-weight: $weight;
+}
