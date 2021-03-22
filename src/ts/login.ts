@@ -2,6 +2,9 @@ import * as $ from "jquery";
 import * as Config from "./config";
 import * as Util from "./util";
 
+//Thank ihateregex.io for this one
+const emailRegex = /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/gi;
+
 export function setupLogin() {
     setupCommon();
 
@@ -45,8 +48,9 @@ interface RegisterForm extends LoginForm {
 
 //Response from the backend
 interface LoginResponse {
-    status:     number;
-    session_id: string;
+    status:         number;
+    status_message: string;
+    session_id:     string;
 }
 
 function setupRegisterPage() {
@@ -56,7 +60,7 @@ function setupRegisterPage() {
         
         //Get the status box element
         let statusElem = document.getElementById("status");
-        
+
         //Get all form elements
         let emailElem = document.getElementById("email");
         let passwordElem = document.getElementById("password");
@@ -74,6 +78,17 @@ function setupRegisterPage() {
             emailElem.classList.value = "border-bottom-red";
 
             statusElem.innerHTML = "You need to enter an E-mail address!";
+            statusElem.classList.value = "red";
+            statusElem.style.visibility = "visible";
+
+            return;
+        }
+
+        //Check if the email address matches the form of an email address
+        if(!emailRegex.test(registerForm.email.value)) {
+            emailElem.classList.value = "border-bottom-red";
+
+            statusElem.innerHTML = "The E-mail address you entered is not valid!";
             statusElem.classList.value = "red";
             statusElem.style.visibility = "visible";
 
@@ -135,20 +150,29 @@ function setupRegisterPage() {
         })
 
         registerReq.done(function(e) {
+            let loginResponse = <LoginResponse> e;
+
+            if(loginResponse.status != 200) {
+                statusElem.innerHTML = loginResponse.status_message;
+                statusElem.classList.value = "red";
+                statusElem.style.visibility = "visible";
+
+                return;
+            }
+
             statusElem.innerHTML = "Registration successful!";
             statusElem.classList.value = "green";
             statusElem.style.visibility = "visible";
 
-            let loginResponse = <LoginResponse> e;
             Util.setCookie("sessionid", loginResponse.session_id);
+            completeCommon();
 
             //Redirect the user back to where they came from
             let from_param = Util.findGetParameter("from");
             if(from_param == null || from_param == "") {
-                window.location.href = "https://thedutchmc.nl";
+                window.location.href = "../dashboard/dashboard.html";            
             }
 
-            completeCommon();
 
             window.location.href = from_param;
         });
@@ -162,5 +186,95 @@ function setupRegisterPage() {
 }
 
 function setupLoginPage() {
+    let loginBtn = document.getElementById("login-submit");
+    loginBtn.addEventListener("click", function(e) {
+        let loginForm = <LoginForm> document.getElementById("login-form");
+
+        //Get the status box element
+        let statusElem = document.getElementById("status");
+
+        //Get all form elements
+        let emailElem = document.getElementById("email");
+        let passwordElem = document.getElementById("password");
+
+        //Clear classes on all fields
+        statusElem.classList.value = "";
+        emailElem.classList.value = "";
+        passwordElem.classList.value = "";
+
+        //Check if the email field is filled in
+        if(loginForm.email == null || loginForm.email.value == "") {
+            emailElem.classList.value = "border-bottom-red";
+
+            statusElem.innerHTML = "You need to enter an E-mail address!";
+            statusElem.classList.value = "red";
+            statusElem.style.visibility = "visible";
+
+            return;
+        }
+
+        //Check if the email address matches the form of an email address
+        if(!emailRegex.test(loginForm.email.value)) {
+            emailElem.classList.value = "border-bottom-red";
+
+            statusElem.innerHTML = "The E-mail address you entered is not valid!";
+            statusElem.classList.value = "red";
+            statusElem.style.visibility = "visible";
+
+            return;
+        }
+
+        //Check if the password field is filled in
+        if(loginForm.password == null || loginForm.password.value == "") {
+            passwordElem.classList.value = "border-bottom-red";
+
+            statusElem.innerHTML = "You need to enter a password!";
+            statusElem.classList.value = "red";
+            statusElem.style.visibility = "visible";
+
+            return;
+        }
+
+        let loginReq = $.ajax({
+            url: Config.LOGIN_ENDPOINT,
+            method: 'POST',
+            data: {
+                email: btoa(loginForm.email.value),
+                password: btoa(loginForm.password.value)
+            }
+        });
+
+        loginReq.done(function(e) {
+            let loginResponse = <LoginResponse> e;
+
+            if(loginResponse.status != 200) {
+                statusElem.innerHTML = loginResponse.status_message;
+                statusElem.classList.value = "red";
+                statusElem.style.visibility = "visible";
+            
+                return;
+            }
+
+            statusElem.innerHTML = "Login successful!";
+            statusElem.classList.value = "green";
+            statusElem.style.visibility = "visible";
+
+            Util.setCookie("sessionid", loginResponse.session_id);
+            completeCommon();
+
+            let from_param = Util.findGetParameter("from");
+            if(from_param == null || from_param == "") {
+                window.location.href = "../dashboard/dashboard.html";
+            }
+
+            window.location.href = from_param;
+        });
+
+        loginReq.fail(function(e) {
+            statusElem.innerHTML = "Something went wrong. Please try again later!";
+            statusElem.classList.value = "red";
+            statusElem.style.visibility = "visible";
+        });
+    });
 
 }

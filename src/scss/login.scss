@@ -1,5 +1,5 @@
-@import "util/fonts";
-@import "util/color.scss";
+@use "util/fonts" as *;
+@use "util/color.scss" as *;
 
 .login-container {
     display: flex;
@@ -90,7 +90,7 @@
 
                         a {
                             text-decoration: none;
-                            color: $analogues;
+                            color: $blueish;
                         }
                     }
                 }
@@ -110,7 +110,7 @@
                     p {
                         border-bottom: 1px solid white;
                         @include set-font($montserrat);
-                        color: $analogues;
+                        color: $blueish;
                         margin: 2px;
                     }
 
@@ -119,7 +119,7 @@
                         content: '';
                         transition: transform 250ms ease-in-out;
                         transform: scaleX(0);  
-                        border-bottom: 1px solid $analogues;
+                        border-bottom: 1px solid $blueish;
                     }
 
                     p:hover:after {

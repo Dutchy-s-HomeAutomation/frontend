@@ -1,0 +1,56 @@
+@use "util/color.scss" as *;
+@use "util/fonts.scss" as *;
+
+.nav-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    justify-items: center;
+
+    background-color: $primary;
+    
+    padding: 5px;
+
+    div {
+        display: flex;
+        flex-direction: row;
+        justify-items: center;
+        align-items: center;
+
+        p {
+            font-size: 1.1em;
+
+            padding: 7px 2.5px 7px 2.5px;
+
+            margin: 0;
+            color: #FFFFFF;
+            border-bottom: 1px solid $primary;
+        }
+    }
+
+    .left {
+        @include set-font($roboto, 400);
+        justify-content: flex-start;
+    }
+
+    .right {
+        @include set-font($roboto);
+        justify-content: flex-end;
+
+        p {
+            cursor: pointer;
+        }
+
+        p:after {
+            display: block;
+            content: '';
+            transition: transform 250ms ease-in-out;
+            transform: scaleX(0);  
+            border-bottom: 1px solid #FFFFFF;
+        }
+
+        p:hover:after {
+            transform: scaleX(1); 
+        }
+    }
+}

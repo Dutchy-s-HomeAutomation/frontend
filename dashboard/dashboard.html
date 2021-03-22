@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <title> Smarthome - Dashboard </title>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+        <script src="../dist/dist.js"></script>
+
+        <meta name="description" content="Smarthome Dashboard">
+        <meta name="author" content="Tobias de Bruijn">
+    </head>
+    <body>
+        <nav>
+            <div class="nav-container">
+                <div class="left">
+                    <p class="header">SmartHome</p> 
+                </div>
+                <div class="right">
+                    <p id="connectionsBtn">Connections</p>
+                    <p id="logoutBtn">Logout</p>
+                </div>
+            </div>
+        </nav>
+        <main>
+            <div class="content-container">
+            </div>
+        </main>
+        <script>
+            SmartHome.loadDashboard();
+        </script>
+    </body>
+</html>
