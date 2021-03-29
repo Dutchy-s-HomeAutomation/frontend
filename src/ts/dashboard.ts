@@ -1,10 +1,8 @@
-import { checkAuth, logout } from "./auth";
+import { isLoggedIn, logout } from "./auth";
 
 export function loadDashboard() {
-    checkAuth();
-    setupLinks();
-
-    
+    isLoggedIn();
+    setupLinks();   
 }
 
 function setupLinks() {

@@ -1,2 +1,4 @@
-export const REGISTER_ENDPOINT = "https://api.thedutchmc.nl/smarthome/auth/register"
-export const LOGIN_ENDPOINT = "https://api.thedutchmc.nl/smarthome/auth/login"
+export const REGISTER_ENDPOINT = "https://connectedhome.api.thedutchmc.nl/auth/register";
+export const LOGIN_ENDPOINT = "https://connectedhome.api.thedutchmc.nl/auth/login";
+export const SESSION_ENDPOINT = "https://connectedhome.api.thedutchmc.nl/auth/session";
+export const OAUTH_FINISH_LOGIN_ENDPOINT = "https://connectedhome.api.thedutchmc.nl/oauth/finish";

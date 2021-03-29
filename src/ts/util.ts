@@ -46,8 +46,19 @@
 export function setCookie(cookieName: string, cookieValue: string) {
     var d = new Date();
     d.setTime(d.getTime() + (30*24*60*60*1000));
-    var expires = "expires="+ d.toUTCString();
+    var expires = "expires=" + d.toUTCString();
     document.cookie = cookieName + "=" + cookieValue + ";" + expires + ";path=/";
+}
+
+/**
+ * Remove (unset) a cookie
+ * @param cookieName The name of the cookie to remove
+ */
+export function removeCookie(cookieName: string) {
+    var d = new Date();
+    d.setTime(d.getTime() - 1);
+    var expirers = "expires" + d.toUTCString();
+    document.cookie = cookieName + "=;" + expirers + ";path=/";
 }
 
 /**

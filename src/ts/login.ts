@@ -1,4 +1,5 @@
 import * as $ from "jquery";
+import { isLoggedIn } from "./auth";
 import * as Config from "./config";
 import * as Util from "./util";
 
@@ -170,7 +171,8 @@ function setupRegisterPage() {
             //Redirect the user back to where they came from
             let from_param = Util.findGetParameter("from");
             if(from_param == null || from_param == "") {
-                window.location.href = "../dashboard/dashboard.html";            
+                window.location.href = "/static/dashboard/dashboard.html";
+                return;        
             }
 
 
@@ -185,7 +187,58 @@ function setupRegisterPage() {
     });
 }
 
+interface OauthResponse {
+    status:         number,
+    redirect_uri:   string
+}
+
+function finishOauthFlow() {
+    let finishOauthLoginReq = $.ajax({
+        url: Config.OAUTH_FINISH_LOGIN_ENDPOINT,
+        method: 'POST',
+        data: {
+            session_id: Util.getCookie("sessionid"),
+            state: Util.findGetParameter("state")
+        }
+    });
+
+    finishOauthLoginReq.done(function(e) {
+        let oauthResponse = <OauthResponse> e;
+        if(oauthResponse.status != 200) {
+            //Something went wrong finishing the oauth flow. Aborting
+            console.error("Unable to finish Oauth flow, got status " + oauthResponse.status);
+            window.location.href = "/static/dashboard/dashboard.html";
+            return;
+        }
+        
+        window.location.href = oauthResponse.redirect_uri;
+        return;
+    });
+
+    finishOauthLoginReq.fail(function(e) {
+        console.error(e);
+        window.location.href = "/static/dashboard/dashboard.html";
+        return;
+    });
+}
+
 function setupLoginPage() {
+    if(isLoggedIn(false)) {
+        let isOauth = Util.findGetParameter("is_oauth");
+        if(isOauth != null && isOauth == "true") {
+            finishOauthFlow();
+            return;
+        }
+        
+        let redirectUri = Util.findGetParameter("redirect_uri");
+        if(redirectUri != null && redirectUri != "") {
+            window.location.href = redirectUri;
+            return;
+        }
+        
+        window.location.href = "/static/dashboard/dashboard.html";    
+    }
+
     let loginBtn = document.getElementById("login-submit");
     loginBtn.addEventListener("click", function(e) {
         let loginForm = <LoginForm> document.getElementById("login-form");
@@ -262,12 +315,20 @@ function setupLoginPage() {
             Util.setCookie("sessionid", loginResponse.session_id);
             completeCommon();
 
-            let from_param = Util.findGetParameter("from");
-            if(from_param == null || from_param == "") {
-                window.location.href = "../dashboard/dashboard.html";
+            let isOauth = Util.findGetParameter("is_oauth");
+            if(isOauth != null && isOauth == "true") {
+                finishOauthFlow();
+                return;
             }
 
-            window.location.href = from_param;
+            let redirectUri = Util.findGetParameter("redirect_uri");
+            if(redirectUri != null || redirectUri != "") {
+                window.location.href = redirectUri;
+                return;
+            }
+
+            window.location.href = "/static/dashboard/dashboard.html";
+            return;
         });
 
         loginReq.fail(function(e) {
