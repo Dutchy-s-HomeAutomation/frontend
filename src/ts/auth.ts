@@ -7,41 +7,42 @@ interface SessionResponse {
     user:           string
 }
 
-export function isLoggedIn(redirect: boolean = true): boolean {
+export function isLoggedIn(callback: (v: boolean) => any, redirect: boolean = true): void {
     let sessionId = Util.getCookie("sessionid");
     if(sessionId == null || sessionId == "") {
         if(redirect) {
             window.location.href = "/static/login/login.html";
         }
         
-        return false;
+        callback(false);
     }
 
-    let sessionRequest = $.ajax({
+    $.ajax({
         url: Config.SESSION_ENDPOINT,
         method: 'post',
         data: {
             session_id: sessionId
-        }
-    });
-
-    sessionRequest.done(function(e) {
-        let sessionResponse = <SessionResponse> e;
-        if(sessionResponse.status == 401) {
+        },
+        success: function(e) {
+            let sessionResponse = <SessionResponse> e;
+            if(sessionResponse.status == 401) {    
+                if(redirect) {
+                    window.location.href = "/static/login/login.html";
+                }
+    
+                callback(false);
+            }
+    
+            if(sessionResponse.status == 200) {
+                callback(true);
+            }
+        },
+        error: function(e) {
+            alert("Something went wrong, please try again later");
             window.location.href = "/static/login/login.html";
-            return false;
-        }
-
-        if(sessionResponse.status == 200) {
-            return true;
+            callback(false);
         }
     });
-
-    sessionRequest.fail(function(e) {
-        alert("Something went wrong, please try again later");
-        window.location.href = "/static/login/login.html";
-        return false;
-    })
 }
 
 export function logout() {
