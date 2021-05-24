@@ -1,6 +1,43 @@
 @use "util/color.scss" as *;
 @use "util/fonts.scss" as *;
 
+@mixin service($size: 1) {
+    .serviceItem {
+        width: 10vw * $size;
+        height: 10vw * $size;
+
+        min-width: 180px * $size;
+        min-height: 180px * $size;
+
+        margin: (1.1em * $size) (1.1em * $size) 0 0;
+        padding: 1em * $size;
+        background-color: white;
+
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+        transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        place-items: center;
+
+        .serviceIcon {
+            justify-self: center;
+            width: 128px * $size;
+            height: 128px * $size;
+        }
+
+        .serviceName {
+            @include set-font($montserrat);
+            text-align: center;
+        }
+    }
+
+    .serviceItem:hover {
+        box-shadow: 0 12px 23px rgba(0,0,0,0.25);
+    }
+}
+
 .content-container {
     section {
         margin-left: 5px;
@@ -41,42 +78,31 @@
             flex-wrap: wrap;
             margin-left: 0.5em;
 
-            .serviceItem {
-                width: 10vw;
-                height: 10vw;
-
-                min-width: 156px;
-                min-height: 156px;
-
-                margin: 1.1em 1.1em 0 0;
-                padding: 1em;
-                background-color: white;
-
-                box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-                transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                place-items: center;
-
-                .serviceIcon {
-                    justify-self: center;
-                    width: 128px;
-                    height: 128px;
-                }
-
-                .serviceName {
-                    @include set-font($montserrat);
-                    text-align: center;
-                }
-            }
-
-            .serviceItem:hover {
-                box-shadow: 0 12px 23px rgba(0,0,0,0.25);
-            }
-
+            @include service();
         }
- 
+    }
+}
+
+.newService {
+    position: absolute;
+    left: 2.7em;
+    top: 3em;
+    right: 3em;
+    bottom: 3em;
+    background-color: white;
+    z-index: 1;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
+
+    padding: 1em;
+    @include service(0.75);
+    
+    h2 {
+        @include set-font($roboto);
+    }
+
+    .serviceHolder {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
     }
 }

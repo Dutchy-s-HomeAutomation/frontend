@@ -8,7 +8,7 @@ module.exports = {
 		filename: 'dist.js',
         path: path.resolve(__dirname, 'dist'),
         libraryTarget: 'var',
-        library: 'SmartHome',
+        library: 'ConnectedHome',
         pathinfo: false
 	},
     module: {

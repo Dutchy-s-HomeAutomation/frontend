@@ -6,3 +6,9 @@
 .border-bottom-red {
     border: 1px solid red !important;
 }
+
+.hidden {
+    height: 0;
+    width: 0;
+    display: none;
+}
